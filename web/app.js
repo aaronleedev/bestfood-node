@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var db = require('./db');
 
 var app = express();
 
@@ -35,6 +36,14 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// 데이터베이스 커넥션 풀 생성
+db.connect(function(err) {
+    if(err) {
+        console.log('Unable to connect to MySQL.');
+        process.exit(1);
+    }
 });
 
 module.exports = app;
